@@ -1,5 +1,5 @@
 ring            portable fission generator          Hyperdrive Polarization Panel
-amulet          planetary citizenship papers        Tricky Hand Gesture
+amulet          planetary citizenship papers        Imperial Pass Codes
 charm           pazaak deck                         Korriban Pleasure-Cruise Ticket
 weapon          stormtrooper blaster rifle          "Carpet's Revenge" Bowcaster
 helm            flight helmet                       B'omarr Brain-Jar Helmet

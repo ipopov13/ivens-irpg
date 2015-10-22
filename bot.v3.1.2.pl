@@ -1507,16 +1507,16 @@ sub loaddb { # load the players database
         $rps{$i[0]}{pen_logout},
         $rps{$i[0]}{created},
         $rps{$i[0]}{lastlogin},
-        $rps{$i[0]}{item}{amulet},
-        $rps{$i[0]}{item}{charm},
-        $rps{$i[0]}{item}{helm},
-        $rps{$i[0]}{item}{"pair of boots"},
-        $rps{$i[0]}{item}{"pair of gloves"},
-        $rps{$i[0]}{item}{ring},
-        $rps{$i[0]}{item}{"set of leggings"},
-        $rps{$i[0]}{item}{shield},
-        $rps{$i[0]}{item}{tunic},
-        $rps{$i[0]}{item}{weapon},
+        $rps{$i[0]}{item}{"planetary citizenship papers"},
+        $rps{$i[0]}{item}{"pazaak deck"},
+        $rps{$i[0]}{item}{"flight helmet"},
+        $rps{$i[0]}{item}{"corellian light freighter"},
+        $rps{$i[0]}{item}{vibroaxe},
+        $rps{$i[0]}{item}{"portable fission generator"},
+        $rps{$i[0]}{item}{"X-34 landspeeder"},
+        $rps{$i[0]}{item}{"personal shield generator"},
+        $rps{$i[0]}{item}{"flight suit"},
+        $rps{$i[0]}{item}{"stormtrooper blaster rifle"},
         $rps{$i[0]}{alignment}) = (@i[1..7],($sock?$i[8]:0),@i[9..$#i]);
     }
     close(RPS);
@@ -1747,8 +1747,8 @@ sub itemsum {
     if (!exists($rps{$user})) { return -1; }
     $sum += int($rps{$user}{item}{$_}) for keys(%{$rps{$user}{item}});
     if ($battle) {
-        return $rps{$user}{alignment} eq 'e' ? int($sum*.9) :
-               $rps{$user}{alignment} eq 'g' ? int($sum*1.1) :
+        return $rps{$user}{alignment} eq 'd' ? int($sum*.9) :
+               $rps{$user}{alignment} eq 'l' ? int($sum*1.1) :
                $sum;
     }
     return $sum;
@@ -1784,36 +1784,48 @@ sub calamity { # suffer a little one
     return unless @players;
     my $player = $players[rand(@players)];
     if (rand(10) < 1) {
-        my @items = ("amulet","charm","weapon","tunic","set of leggings",
-                     "shield");
+        my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
         my $type = $items[rand(@items)];
-        if ($type eq "amulet") {
-            chanmsg(clog("$player fell, chipping the stone in his amulet! ".
-                         "$player\'s $type loses 10% of its effectiveness."));
+        if ($type eq "planetary citizenship papers") {
+            chanmsg(clog("$player dropped his ID in a garbage chute!"));
         }
-        elsif ($type eq "charm") {
-            chanmsg(clog("$player slipped and dropped his charm in a dirty ".
-                         "bog! $player\'s $type loses 10% of its ".
-                         "effectiveness."));
+        elsif ($type eq "pazaak deck") {
+            chanmsg(clog("$player got into a bar brawl and lost an ".
+            "expensive card from their pazaak deck!"));
         }
-        elsif ($type eq "weapon") {
-            chanmsg(clog("$player left his weapon out in the rain to rust! ".
-                         "$player\'s $type loses 10% of its effectiveness."));
+        elsif ($type eq "stormtrooper blaster rifle") {
+            chanmsg(clog("$player left his weapon out in a sandstorm!"));
         }
-        elsif ($type eq "tunic") {
-            chanmsg(clog("$player spilled a level 7 shrinking potion on his ".
-                         "tunic! $player\'s $type loses 10% of its ".
-                         "effectiveness."));
+        elsif ($type eq "flight suit") {
+            chanmsg(clog("$player took a couple of blaster bolts and ".
+            "their flight suit is damaged!"));
         }
-        elsif ($type eq "shield") {
-            chanmsg(clog("$player\'s shield was damaged by a dragon's fiery ".
-                         "breath! $player\'s $type loses 10% of its ".
-                         "effectiveness."));
+        elsif ($type eq "personal shield generator") {
+            chanmsg(clog("$player\'s shield battery was gnawed on by gizka!"));
+        }
+        elsif ($type eq "portable fission generator") {
+            chanmsg(clog("$player mishandled a piece of sensitive equipment, nearly blowing themselves up!"));
+        }
+        elsif ($type eq "flight helmet") {
+            chanmsg(clog("$player couldn't take their eyes off the ".
+            "twi'lek dancers and hit a wall, cracking their helmet!"));
+        }
+        elsif ($type eq "vibroaxe") {
+            chanmsg(clog("$player misjudged a swing and dented their ".
+            "melee weapon on a rock!"));
+        }
+        elsif ($type eq "X-34 landspeeder") {
+            chanmsg(clog("$player was shot at by sand people and their ".
+            "speeder was damaged!"));
         }
         else {
-            chanmsg(clog("$player burned a hole through his leggings while ".
-                         "ironing them! $player\'s $type loses 10% of its ".
-                         "effectiveness."));
+            chanmsg(clog("It seems the Kessel run was too much for ".
+            "$player and they smashed into an asteroid!"));
         }
         my $suffix="";
         if ($rps{$player}{item}{$type} =~ /(\D)$/) { $suffix=$1; }
