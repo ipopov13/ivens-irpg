@@ -1284,14 +1284,17 @@ sub challenge_opp { # pit argument player against random player
                     ".");
         }
         elsif (rand(25) < 1 && $opp ne $primnick && $rps{$u}{level} > 19) {
-            my @items = ("ring","amulet","charm","weapon","helm","tunic",
-                         "pair of gloves","set of leggings","shield",
-                         "pair of boots");
+            my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
             my $type = $items[rand(@items)];
             if (int($rps{$opp}{item}{$type}) > int($rps{$u}{item}{$type})) {
-                chanmsg(clog("In the fierce battle, $opp dropped his level ".
-                             int($rps{$opp}{item}{$type})." $type! $u picks ".
-                             "it up, tossing his old level ".
+                chanmsg(clog("In the fierce battle, $opp lost his level ".
+                             int($rps{$opp}{item}{$type})." $type! $u takes ".
+                             "it, leaving his old level ".
                              int($rps{$u}{item}{$type})." $type to $opp."));
                 my $tempitem = $rps{$u}{item}{$type};
                 $rps{$u}{item}{$type}=$rps{$opp}{item}{$type};
@@ -1347,8 +1350,12 @@ sub team_battle { # pit three players against three other players
 
 sub find_item { # find item for argument player
     my $u = shift;
-    my @items = ("ring","amulet","charm","weapon","helm","tunic",
-                 "pair of gloves","set of leggings","shield","pair of boots");
+    my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
     my $type = $items[rand(@items)];
     my $level = 1;
     my $ulevel;
@@ -1359,12 +1366,11 @@ sub find_item { # find item for argument player
     }
     if ($rps{$u}{level} >= 25 && rand(40) < 1) {
         $ulevel = 50+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{helm})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Mattt's Omniscience Grand Crown! ".
-                   "Your enemies fall before you as you anticipate their ".
-                   "every move.",$rps{$u}{nick});
-            $rps{$u}{item}{helm} = $ulevel."a";
+        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{"flight helmet"})) {
+            notice("You happen upon an escape pod half burried in the sand! You quickly ".
+                   "search it and find a level $ulevel B'omarr Brain-Jar Helmet! ".
+                   "Your enemies will be surprised to death by your insensitivity!",$rps{$u}{nick});
+            $rps{$u}{item}{"flight helmet"} = $ulevel."a";
             return;
         }
     }
