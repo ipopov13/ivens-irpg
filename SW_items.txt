@@ -7,4 +7,18 @@ tunic           flight suit                         Force Robe
 pair of gloves  vibroaxe                            Jedi Master's Hokey Stick
 shield          personal shield generator           Vandalized Destroyer Droid Shield
 set of leggings X-34 landspeeder                    Cloud Car Combatspeeder
-pair of boots   correlian light freighter           Mud-covered X-wing
+pair of boots   corellian light freighter           Mud-covered X-wing
+
+for my $item ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter") 
+                   
+A patch suitable for the win will include:
+- Renaming items/types to SWC appropriate things (we don't have gloves and rings and shit), this requires changing the bot's perl source code
+- Add/modify unique items (name after famous characters, your favorite server admin, etc.)
+- Change hardcoded game text (hand of god, alignment strings, etc.) to a SW/SWC theme
+- Update/rename the events and quests (in events.txt)
+- Tongue-in-cheek references and star wars humor or in-jokes are encouraged

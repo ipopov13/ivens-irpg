@@ -5,7 +5,13 @@ Star Wars setting.
 --------------------------------------------------------------------------------
   v3.1.3isw: released 18/11/15
 --------------------------------------------------------------------------------
-  - 
+  !! TO DO: Add item list to STATUS command on line 777 (self only)
+  !! Where is alignment used?
+  !! TO DO: Add p200 for non-gray force changers (line 821)
+  - Changed quest success text
+  - Changed alignment scale to Force scale
+  - Changed command and text HOG to DISTURB (Hand of God -> disturbance in the Force)
+  - changed base item names
   - added changes to README
 
 --------------------------------------------------------------------------------

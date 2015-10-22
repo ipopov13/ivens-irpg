@@ -166,9 +166,12 @@ if (! -e $opts{dbfile}) {
     $rps{$uname}{y} = int(rand($opts{mapy}));
     $rps{$uname}{alignment}="n";
     $rps{$uname}{isadmin} = 1;
-    for my $item ("ring","amulet","charm","weapon","helm",
-                  "tunic","pair of gloves","shield",
-                  "set of leggings","pair of boots") {
+    for my $item ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter") {
         $rps{$uname}{item}{$item} = 0;
     }
     for my $pen ("pen_mesg","pen_nick","pen_part",
@@ -524,9 +527,12 @@ sub parse {
                         $rps{$arg[4]}{y} = int(rand($opts{mapy}));
                         $rps{$arg[4]}{alignment}="n";
                         $rps{$arg[4]}{isadmin} = 0;
-                        for my $item ("ring","amulet","charm","weapon","helm",
-                                      "tunic","pair of gloves","shield",
-                                      "set of leggings","pair of boots") {
+                        for my $item ("portable fission generator",
+                                       "planetary citizenship papers",
+                                       "pazaak deck","stormtrooper blaster rifle",
+                                       "flight helmet","flight suit",
+                                       "vibroaxe","personal shield generator",
+                                       "X-34 landspeeder","corellian light freighter") {
                             $rps{$arg[4]}{item}{$item} = 0;
                         }
                         for my $pen ("pen_mesg","pen_nick","pen_part",
@@ -626,12 +632,12 @@ sub parse {
                             $usernick, 1);
                 }
             }
-            elsif ($arg[3] eq "hog") {
+            elsif ($arg[3] eq "disturb") {
                 if (!ha($username)) {
-                    privmsg("You don't have access to HOG.", $usernick);
+                    privmsg("You don't have access to DISTURB.", $usernick);
                 }
                 else {
-                    chanmsg("$usernick has summoned the Hand of God.");
+                    chanmsg("$usernick has caused a disturbance in the Force!");
                     hog();
                 }
             }
@@ -800,19 +806,25 @@ sub parse {
                     privmsg("Your password was changed.",$usernick);
                 }
             }
-            elsif ($arg[3] eq "align") {
+            elsif ($arg[3] eq "force") {
                 if (!defined($username)) {
                     privmsg("You are not logged in.", $usernick)
                 }
-                elsif (!defined($arg[4]) || (lc($arg[4]) ne "good" && 
-                       lc($arg[4]) ne "neutral" && lc($arg[4]) ne "evil")) {
-                    privmsg("Try: ALIGN <good|neutral|evil>", $usernick);
+                elsif (!defined($arg[4]) || (lc($arg[4]) ne "light" && 
+                       lc($arg[4]) ne "gray" && lc($arg[4]) ne "dark")) {
+                    privmsg("Try: FORCE <light|gray|dark>", $usernick);
                 }
                 else {
                     $rps{$username}{alignment} = substr(lc($arg[4]),0,1);
-                    chanmsg("$username has changed alignment to: ".lc($arg[4]).
-                            ".");
-                    privmsg("Your alignment was changed to ".lc($arg[4]).".",
+                    ## Add some flavour in force changes
+                    if (lc($arg[4]) ne "gray") {
+                        chanmsg("$username has decided to join the ".lc($arg[4]).
+                        " side.")
+                    }
+                    else {
+                        chanmsg("$username has decided to walk a line between the Light and the Dark.")
+                    }
+                    privmsg("Your force alignment was changed to ".lc($arg[4]).".",
                             $usernick);
                 }
             }
@@ -1098,23 +1110,22 @@ sub ts { # timestamp
                    $ts[4]+1,$ts[3],$ts[5]%100,$ts[2],$ts[1],$ts[0]);
 }
 
-sub hog { # summon the hand of god
+sub hog { # disturbance in the Force
     my @players = grep { $rps{$_}{online} } keys(%rps);
     my $player = $players[rand(@players)];
     my $win = int(rand(5));
     my $time = int(((5 + int(rand(71)))/100) * $rps{$player}{next});
     if ($win) {
-        chanmsg(clog("Verily I say unto thee, the Heavens have burst forth, ".
-                     "and the blessed hand of God carried $player ".
-                     duration($time)." toward level ".($rps{$player}{level}+1).
+        chanmsg(clog("The fabric of the world shudders as the Force ".
+                     "grows in $player, bringing them ".
+                     duration($time)." closer to level ".($rps{$player}{level}+1).
                      "."));
         $rps{$player}{next} -= $time;
     }
     else {
-        chanmsg(clog("Thereupon He stretched out His little finger among them ".
-                     "and consumed $player with fire, slowing the heathen ".
-                     duration($time)." from level ".($rps{$player}{level}+1).
-                     "."));
+        chanmsg(clog("The struggle between the Light and the Dark is too ".
+                     "much for $player! They break down in agony for ".
+                     duration($time)." losing sense of time."));
         $rps{$player}{next} += $time;
     }
     chanmsg("$player reaches next level in ".duration($rps{$player}{next}).".");
@@ -1131,9 +1142,9 @@ sub rpcheck { # check levels, update database
     # there's really nothing to do here if there are no online users
     return unless $online;
     my $onlineevil = scalar(grep { $rps{$_}{online} &&
-                                   $rps{$_}{alignment} eq "e" } keys(%rps));
+                                   $rps{$_}{alignment} eq "d" } keys(%rps));
     my $onlinegood = scalar(grep { $rps{$_}{online} &&
-                                   $rps{$_}{alignment} eq "g" } keys(%rps));
+                                   $rps{$_}{alignment} eq "l" } keys(%rps));
     if (!$opts{noscale}) {
         if (rand((20*86400)/$opts{self_clock}) < $online) { hog(); }
         if (rand((24*86400)/$opts{self_clock}) < $online) { team_battle(); }
@@ -1158,7 +1169,7 @@ sub rpcheck { # check levels, update database
         if (!@{$quest{questers}}) { quest(); }
         elsif ($quest{type} == 1) {
             chanmsg(clog(join(", ",(@{$quest{questers}})[0..2]).", and ".
-                         "$quest{questers}->[3] have blessed the realm by ".
+                         "$quest{questers}->[3] have strenghtened the Force by ".
                          "completing their quest! 25% of their burden is ".
                          "eliminated."));
             for (@{$quest{questers}}) {
