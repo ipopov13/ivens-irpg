@@ -1369,92 +1369,101 @@ sub find_item { # find item for argument player
             $level = $num;
         }
     }
-    if ($rps{$u}{level} >= 25 && rand(40) < 1) {
-        $ulevel = 50+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{"flight helmet"})) {
-            notice("You happen upon an escape pod half burried in the sand! You quickly ".
-                   "search it and find a level $ulevel B'omarr Brain-Jar Helmet! ".
-                   "Your enemies will be surprised to death by your insensitivity!",$rps{$u}{nick});
+    ## Restructured unique item find code a bit to reduce redundancy
+    $ulevel = 25*(1+int($rps{$u}{level}/25))+int(rand(25));
+    if ($rps{$u}{level} >= 25 && rand(5) < 1 && $ulevel >= $level) {
+        if ($type eq "flight helmet" && 
+             $ulevel > int($rps{$u}{item}{"flight helmet"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel B\'omarr Brain-Jar Helmet! ".
+                   "Your enemies will be surprised to death by your insensitivity!",
+                   $rps{$u}{nick});
             $rps{$u}{item}{"flight helmet"} = $ulevel."a";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 25 && rand(40) < 1) {
-        $ulevel = 50+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{ring})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Juliet's Glorious Ring of ".
-                   "Sparkliness! You enemies are blinded by both its glory ".
-                   "and their greed as you bring desolation upon them.",
+        elsif ($type eq "portable fission generator" &&
+                $ulevel > int($rps{$u}{item}{"portable fission generator"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Hyperdrive Polarization Panel! ".
+                   "You will never have to repolarize those motivators again!",
                    $rps{$u}{nick});
-            $rps{$u}{item}{ring} = $ulevel."h";
+            $rps{$u}{item}{"portable fission generator"} = $ulevel."h";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 30 && rand(40) < 1) {
-        $ulevel = 75+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{tunic})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Res0's Protectorate Plate Mail! ".
-                   "Your enemies cower in fear as their attacks have no ".
-                   "effect on you.",$rps{$u}{nick});
-            $rps{$u}{item}{tunic} = $ulevel."b";
+        elsif ($type eq "planetary citizenship papers" &&
+                $ulevel > int($rps{$u}{item}{"planetary citizenship papers"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Imperial Pass Code! ".
+                   "Your enemies will never see you coming!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"planetary citizenship papers"} = $ulevel."b";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 35 && rand(40) < 1) {
-        $ulevel = 100+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{amulet})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Dwyn's Storm Magic Amulet! Your ".
-                   "enemies are swept away by an elemental fury before the ".
-                   "war has even begun",$rps{$u}{nick});
-            $rps{$u}{item}{amulet} = $ulevel."c";
+        elsif ($type eq "pazaak deck" &&
+                $ulevel > int($rps{$u}{item}{"pazaak deck"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Korriban Pleasure-Cruise Ticket! ".
+                   "The worst nightmare that your enemies can give you will be nothing ".
+                   "compared to those memories!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"pazaak deck"} = $ulevel."c";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 40 && rand(40) < 1) {
-        $ulevel = 150+int(rand(25));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{weapon})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Jotun's Fury Colossal Sword! Your ".
-                   "enemies' hatred is brought to a quick end as you arc your ".
-                   "wrist, dealing the crushing blow.",$rps{$u}{nick});
-            $rps{$u}{item}{weapon} = $ulevel."d";
+        elsif ($type eq "stormtrooper blaster rifle" &&
+                $ulevel > int($rps{$u}{item}{"stormtrooper blaster rifle"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel `Carpet\'s Revenge` Bowcaster! ".
+                   "That thing could go through a couple of stormtroopers and pierce".
+                   "a ship\'s hull with a single shot!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"stormtrooper blaster rifle"} = $ulevel."d";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 45 && rand(40) < 1) {
-        $ulevel = 175+int(rand(26));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{weapon})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Drdink's Cane of Blind Rage! Your ".
-                   "enemies are tossed aside as you blindly swing your arm ".
-                   "around hitting stuff.",$rps{$u}{nick});
-            $rps{$u}{item}{weapon} = $ulevel."e";
+        elsif ($type eq "flight suit" &&
+                $ulevel > int($rps{$u}{item}{"flight suit"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Force Robe! ".
+                   "You can do incredible things with attire like this. With Force!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"flight suit"} = $ulevel."e";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 48 && rand(40) < 1) {
-        $ulevel = 250+int(rand(51));
-        if ($ulevel >= $level && $ulevel >
-            int($rps{$u}{item}{"pair of boots"})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Mrquick's Magical Boots of ".
-                   "Swiftness! Your enemies are left choking on your dust as ".
-                   "you run from them very, very quickly.",$rps{$u}{nick});
-            $rps{$u}{item}{"pair of boots"} = $ulevel."f";
+        elsif ($type eq "vibroaxe" &&
+                $ulevel > int($rps{$u}{item}{"vibroaxe"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Jedi Master\'s Hokey Stick! ".
+                   "No one will be able to stand in your way when you wield it!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"vibroaxe"} = $ulevel."f";
             return;
         }
-    }
-    elsif ($rps{$u}{level} >= 52 && rand(40) < 1) {
-        $ulevel = 300+int(rand(51));
-        if ($ulevel >= $level && $ulevel > int($rps{$u}{item}{weapon})) {
-            notice("The light of the gods shines down upon you! You have ".
-                   "found the level $ulevel Jeff's Cluehammer of Doom! Your ".
-                   "enemies are left with a sudden and intense clarity of ".
-                   "mind... even as you relieve them of it.",$rps{$u}{nick});
-            $rps{$u}{item}{weapon} = $ulevel."g";
+        elsif ($type eq "personal shield generator" &&
+                $ulevel > int($rps{$u}{item}{"personal shield generator"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a level $ulevel Vandalized Destroyer Droid Shield! ".
+                   "You will be truly impenetrable now!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"personal shield generator"} = $ulevel."g";
+            return;
+        }
+        elsif ($type eq "X-34 landspeeder" &&
+                $ulevel > int($rps{$u}{item}{"X-34 landspeeder"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find nothing of interest. However, once you go around it ".
+                   "you notice a level $ulevel Cloud Car Combatspeeder floating some way off. ".
+                   "You quickly reach the vehicle and hop in!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"X-34 landspeeder"} = $ulevel."i";
+            return;
+        }
+        elsif ($type eq "corellian light freighter" &&
+                $ulevel > int($rps{$u}{item}{"corellian light freighter"})) {
+            notice("You happen upon an escape pod half-burried in the sand! You quickly ".
+                   "search it and find a map! It leads you to a nearby bog where you are ".
+                   "amazed for find an abandoned level $ulevel Mud-covered X-wing fighter! ".
+                   "No more climbing trees for you!",
+                   $rps{$u}{nick});
+            $rps{$u}{item}{"corellian light freighter"} = $ulevel."j";
             return;
         }
     }
@@ -1818,7 +1827,7 @@ sub calamity { # suffer a little one
             chanmsg(clog("$player mishandled a piece of sensitive equipment, nearly blowing themselves up!"));
         }
         elsif ($type eq "flight helmet") {
-            chanmsg(clog("$player couldn't take their eyes off the ".
+            chanmsg(clog("$player couldn\'t take their eyes off the ".
             "twi\'lek dancers and hit a wall, cracking their helmet!"));
         }
         elsif ($type eq "vibroaxe") {
@@ -1969,7 +1978,7 @@ sub quest {
                 "$quest{questers}->[3] have been chosen by the Jedi Order to ".
                 "$quest{text}. Participants must first reach [$quest{p1}->[0],".
                 "$quest{p1}->[1]], then [$quest{p2}->[0],$quest{p2}->[1]].".
-                ($opts{mapurl}?" See $opts{mapurl} to monitor their journey's ".
+                ($opts{mapurl}?" See $opts{mapurl} to monitor their journey\'s ".
                 "progress.":""));
     }
     writequestfile();

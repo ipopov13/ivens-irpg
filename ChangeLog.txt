@@ -5,21 +5,43 @@ Star Wars setting.
 --------------------------------------------------------------------------------
   v3.1.3isw: released 18/11/15
 --------------------------------------------------------------------------------
-  !! Why are unique item levels strings? - For item listing with names!
-  !! TO DO: Add the other unique items, more tiers? (line 1377)
+  - NO FUNCTION/SUB NAMES IN THE CODE HAVE BEEN CHANGED!
   - Changed calamity/godsend texts
   - Changed quest main/penalty text
   - Changed quest success text
   - Changed item event text
   - Changed battle text to fit all items
+  - Changed unique item text
+  - All unique items have the following stats:
+    * level 25+ required to find
+    * item level = 25*(1+ (char_level MOD 25)) + rand(0,24)
+    * chance to find 1/5 (increased as previous system was checking for each item separately)
   - Unique items:
-    B'omarr Brain Jar Helmet: lvl25+, 50-74, 1/40
+    * Hyperdrive Polarization Panel
+    * Imperial Pass Codes
+    * Korriban Pleasure-Cruise Ticket
+    * "Carpet's Revenge" Bowcaster
+    * B'omarr Brain-Jar Helmet
+    * Force Robe
+    * Jedi Master's Hokey Stick
+    * Vandalized Destroyer Droid Shield
+    * Cloud Car Combatspeeder
+    * Mud-covered X-wing
   - Changed alignment scale to Force scale (/msg bot FORCE <light|gray|dark>)
   - Added a p200 penalty for leaving the Light/Dark side, gray characters have no penalty for change
   - Changed command and text HOG to DISTURB (Hand of God -> disturbance in the Force)
-  - Changed base item types
+  - Changed base item types to:
+    * portable fission generator
+    * planetary citizenship papers
+    * pazaak deck
+    * stormtrooper blaster rifle
+    * flight helmet
+    * flight suit
+    * vibroaxe
+    * personal shield generator
+    * X-34 landspeeder
+    * corellian light freighter
   - Added changes to README
-  - NO FUNCTION NAMES HAVE BEEN CHANGED!
 
 --------------------------------------------------------------------------------
   v3.1.2: released 6/6/04
