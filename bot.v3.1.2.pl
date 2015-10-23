@@ -164,7 +164,7 @@ if (! -e $opts{dbfile}) {
     $rps{$uname}{lastlogin} = time();
     $rps{$uname}{x} = int(rand($opts{mapx}));
     $rps{$uname}{y} = int(rand($opts{mapy}));
-    $rps{$uname}{alignment}="n";
+    $rps{$uname}{alignment}="g";
     $rps{$uname}{isadmin} = 1;
     for my $item ("portable fission generator",
                    "planetary citizenship papers",
@@ -176,7 +176,7 @@ if (! -e $opts{dbfile}) {
     }
     for my $pen ("pen_mesg","pen_nick","pen_part",
                  "pen_kick","pen_quit","pen_quest",
-                 "pen_logout","pen_logout") {
+                 "pen_logout","pen_logout","pen_force") {
         $rps{$uname}{$pen} = 0;
     }
     writedb();
@@ -525,7 +525,7 @@ sub parse {
                         $rps{$arg[4]}{pass} = crypt($arg[5],mksalt());
                         $rps{$arg[4]}{x} = int(rand($opts{mapx}));
                         $rps{$arg[4]}{y} = int(rand($opts{mapy}));
-                        $rps{$arg[4]}{alignment}="n";
+                        $rps{$arg[4]}{alignment}="g";
                         $rps{$arg[4]}{isadmin} = 0;
                         for my $item ("portable fission generator",
                                        "planetary citizenship papers",
@@ -537,7 +537,7 @@ sub parse {
                         }
                         for my $pen ("pen_mesg","pen_nick","pen_part",
                                      "pen_kick","pen_quit","pen_quest",
-                                     "pen_logout","pen_logout") {
+                                     "pen_logout","pen_logout","pen_force") {
                             $rps{$arg[4]}{$pen} = 0;
                         }
                         chanmsg("Welcome $usernick\'s new player $arg[4], the ".
@@ -815,6 +815,11 @@ sub parse {
                     privmsg("Try: FORCE <light|gray|dark>", $usernick);
                 }
                 else {
+                    ## Add penalty for leaving the light/dark
+                    if ($rps{$username}{alignment} ne "g" &&
+                        $rps{$username}{alignment} ne substr(lc($arg[4]),0,1)) {
+                        penalize($username,"forcechange");
+                    }
                     $rps{$username}{alignment} = substr(lc($arg[4]),0,1);
                     ## Add some flavour in force changes
                     if (lc($arg[4]) ne "gray") {
@@ -1272,8 +1277,8 @@ sub challenge_opp { # pit argument player against random player
                      "removed from $u\'s clock."));
         $rps{$u}{next} -= $gain;
         chanmsg("$u reaches next level in ".duration($rps{$u}{next}).".");
-        my $csfactor = $rps{$u}{alignment} eq "g" ? 50 :
-                       $rps{$u}{alignment} eq "e" ? 20 :
+        my $csfactor = $rps{$u}{alignment} eq "l" ? 50 :
+                       $rps{$u}{alignment} eq "d" ? 20 :
                        35;
         if (rand($csfactor) < 1 && $opp ne $primnick) {
             $gain = int(((5 + int(rand(20)))/100) * $rps{$opp}{next});
@@ -1505,6 +1510,7 @@ sub loaddb { # load the players database
         $rps{$i[0]}{pen_quit},
         $rps{$i[0]}{pen_quest},
         $rps{$i[0]}{pen_logout},
+        $rps{$i[0]}{pen_force},
         $rps{$i[0]}{created},
         $rps{$i[0]}{lastlogin},
         $rps{$i[0]}{item}{"planetary citizenship papers"},
@@ -2060,6 +2066,15 @@ sub penalize {
                "parting.",$rps{$username}{nick});
         $rps{$username}{online}=0;
     }
+    elsif ($type eq "forcechange") {
+        $pen = int(200 * ($opts{rppenstep}**$rps{$username}{level}));
+        if ($opts{limitpen} && $pen > $opts{limitpen}) {
+            $pen = $opts{limitpen};
+        }
+        $rps{$username}{pen_force}+=$pen;
+        notice("Penalty of ".duration($pen)." added to your timer for ".
+               "changing your force alignment!",$rps{$username}{nick});
+    }
     elsif ($type eq "kick") {
         $pen = int(250 * ($opts{rppenstep}**$rps{$username}{level}));
         if ($opts{limitpen} && $pen > $opts{limitpen}) {
@@ -2313,6 +2328,7 @@ sub writedb {
                         "pen_quit",
                         "pen_quest",
                         "pen_logout",
+                        "pen_force",
                         "created",
                         "last login",
                         "portable fission generator",
@@ -2349,6 +2365,7 @@ sub writedb {
                                 $rps{$k}{pen_quit},
                                 $rps{$k}{pen_quest},
                                 $rps{$k}{pen_logout},
+                                $rps{$k}{pen_force},
                                 $rps{$k}{created},
                                 $rps{$k}{lastlogin},
                                 $rps{$k}{item}{"portable fission generator"},

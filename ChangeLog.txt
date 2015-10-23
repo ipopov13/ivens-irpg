@@ -5,10 +5,7 @@ Star Wars setting.
 --------------------------------------------------------------------------------
   v3.1.3isw: released 18/11/15
 --------------------------------------------------------------------------------
-  !! TO DO: Add item list to STATUS command on line 777 (self only)
-  !! Where is alignment used?
-  !! Why are unique item levels strings (suffix used in item level in calamity/good event)?
-  !! TO DO: Add p200 for non-gray force changers (line 821)
+  !! Why are unique item levels strings? - For item listing with names!
   !! TO DO: Add the other unique items, more tiers? (line 1377)
   !! TO DO: Change events text
   - Changed quest main/penalty text
@@ -17,10 +14,12 @@ Star Wars setting.
   - Unique items:
     B'omarr Brain Jar Helmet: 25+, 50-74, 1/40
   - Changed quest success text
-  - Changed alignment scale to Force scale
+  - Changed alignment scale to Force scale (/msg bot FORCE <light|gray|dark>)
+  - Added a p200 penalty for leaving the Light/Dark side, gray characters have no penalty for change
   - Changed command and text HOG to DISTURB (Hand of God -> disturbance in the Force)
-  - changed base item names
-  - added changes to README
+  - Changed base item names
+  - Added changes to README
+  - NO FUNCTION NAMES HAVE BEEN CHANGED!
 
 --------------------------------------------------------------------------------
   v3.1.2: released 6/6/04
