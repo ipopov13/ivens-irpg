@@ -1813,7 +1813,7 @@ sub calamity { # suffer a little one
         }
         elsif ($type eq "flight helmet") {
             chanmsg(clog("$player couldn't take their eyes off the ".
-            "twi'lek dancers and hit a wall, cracking their helmet!"));
+            "twi\'lek dancers and hit a wall, cracking their helmet!"));
         }
         elsif ($type eq "vibroaxe") {
             chanmsg(clog("$player misjudged a swing and dented their ".
@@ -1856,33 +1856,45 @@ sub godsend { # bless the unworthy
     return unless @players;
     my $player = $players[rand(@players)];
     if (rand(10) < 1) {
-        my @items = ("amulet","charm","weapon","tunic","set of leggings",
-                     "shield");
+        my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
         my $type = $items[rand(@items)];
-        if ($type eq "amulet") {
-            chanmsg(clog("$player\'s amulet was blessed by a passing cleric! ".
-                         "$player\'s $type gains 10% effectiveness."));
+        if ($type eq "portable fission generator") {
+            chanmsg(clog("$player\'s fission generator was optimized for high ".
+            "energy output!"));
         }
-        elsif ($type eq "charm") {
-            chanmsg(clog("$player\'s charm ate a bolt of lightning! ".
-                         "$player\'s $type gains 10% effectiveness."));
+        elsif ($type eq "planetary citizenship papers") {
+            chanmsg(clog("$player\'s Coruscant landing permit was extended!"));
         }
-        elsif ($type eq "weapon") {
-            chanmsg(clog("$player sharpened the edge of his weapon! ".
-                         "$player\'s $type gains 10% effectiveness."));
+        elsif ($type eq "pazaak deck") {
+            chanmsg(clog("$player found a rare pazaak card on the flea market!"));
         }
-        elsif ($type eq "tunic") {
-            chanmsg(clog("A magician cast a spell of Rigidity on $player\'s ".
-                         "tunic! $player\'s $type gains 10% effectiveness."));
+        elsif ($type eq "stormtrooper blaster rifle") {
+            chanmsg(clog("$player\'s weapon was recalibrated by a gungan technician!"));
         }
-        elsif ($type eq "shield") {
-            chanmsg(clog("$player reinforced his shield with a dragon's ".
-                         "scales! $player\'s $type gains 10% effectiveness."));
+        elsif ($type eq "flight helmet") {
+            chanmsg(clog("$player got a new anti-glare visor for their helmet!"));
+        }
+        elsif ($type eq "flight suit") {
+            chanmsg(clog("$player got their clothes dry-cleaned! That sand really gets everywhere."));
+        }
+        elsif ($type eq "vibroaxe") {
+            chanmsg(clog("$player changed their melee weapon\'s handle design to better ".
+            "suit their emotional state!"));
+        }
+        elsif ($type eq "personal shield generator") {
+            chanmsg(clog("$player\'s shield got supercharged by a stray bolt of lightning!"));
+        }
+        elsif ($type eq "X-34 landspeeder") {
+            chanmsg(clog("$player splurged on a new actuator for their speeder!"));
         }
         else {
-            chanmsg(clog("The local wizard imbued $player\'s pants with a ".
-                         "Spirit of Fortitude! $player\'s $type gains 10% ".
-                         "effectiveness."));
+            chanmsg(clog("$player installed a couple of secret compartments on their ".
+            "ship. Someone call a scanning crew!"));
         }
         my $suffix="";
         if ($rps{$player}{item}{$type} =~ /(\D)$/) { $suffix=$1; }
@@ -1902,7 +1914,7 @@ sub godsend { # bless the unworthy
                 $actioned = $1;
             }
         }
-        chanmsg(clog("$player $actioned! This wondrous godsend has ".
+        chanmsg(clog("$player $actioned! This lucky event has ".
                      "accelerated them ".duration($time)." towards level ".
                      ($rps{$player}{level}+1)."."));
         $rps{$player}{next} -= $time;
@@ -1942,13 +1954,13 @@ sub quest {
     close(Q);
     if ($quest{type} == 1) {
         chanmsg(join(", ",(@{$quest{questers}})[0..2]).", and ".
-                "$quest{questers}->[3] have been chosen by the gods to ".
+                "$quest{questers}->[3] have been chosen by the Jedi Order to ".
                 "$quest{text}. Quest to end in ".duration($quest{qtime}-time()).
                 ".");    
     }
     elsif ($quest{type} == 2) {
         chanmsg(join(", ",(@{$quest{questers}})[0..2]).", and ".
-                "$quest{questers}->[3] have been chosen by the gods to ".
+                "$quest{questers}->[3] have been chosen by the Jedi Order to ".
                 "$quest{text}. Participants must first reach [$quest{p1}->[0],".
                 "$quest{p1}->[1]], then [$quest{p2}->[0],$quest{p2}->[1]].".
                 ($opts{mapurl}?" See $opts{mapurl} to monitor their journey's ".
@@ -1962,12 +1974,12 @@ sub questpencheck {
     my ($quester,$player);
     for $quester (@{$quest{questers}}) {
         if ($quester eq $k) {
-            chanmsg(clog("$k\'s prudence and self-regard has brought the ".
-                         "wrath of the gods upon the realm. All your great ".
-                         "wickedness makes you as it were heavy with lead, ".
-                         "and to tend downwards with great weight and ".
-                         "pressure towards hell. Therefore have you drawn ".
-                         "yourselves 15 steps closer to that gaping maw."));
+            chanmsg(clog("$k\'s insolence and rebelliousness has brought the ".
+                         "wrath of the Emperor upon the known worlds. The armies ".
+                         "of the Empire block all transportation routes and ".
+                         "impose a tax on every flying tin can out there. ".
+                         "You are forced to go into hiding for a time until ".
+                         "the offensive has ended."));
             for $player (grep { $rps{$_}{online} } keys %rps) {
                 my $gain = int(15 * ($opts{rppenstep}**$rps{$player}{level}));
                 $rps{$player}{pen_quest} += $gain;
@@ -2140,15 +2152,18 @@ sub collision_fight {
                     ".");
         }
         elsif (rand(25) < 1 && $opp ne $primnick && $rps{$u}{level} > 19) {
-            my @items = ("ring","amulet","charm","weapon","helm","tunic",
-                         "pair of gloves","set of leggings","shield",
-                         "pair of boots");
+            my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
             my $type = $items[rand(@items)];
             if (int($rps{$opp}{item}{$type}) > int($rps{$u}{item}{$type})) {
-                chanmsg("In the fierce battle, $opp dropped his level ".
-                        int($rps{$opp}{item}{$type})." $type! $u picks it up, ".
-                        "tossing his old level ".int($rps{$u}{item}{$type}).
-                        " $type to $opp.");
+                chanmsg("In the fierce battle, $opp lost his level ".
+                             int($rps{$opp}{item}{$type})." $type! $u takes ".
+                             "it, leaving his old level ".
+                             int($rps{$u}{item}{$type})." $type to $opp.");
                 my $tempitem = $rps{$u}{item}{$type};
                 $rps{$u}{item}{$type}=$rps{$opp}{item}{$type};
                 $rps{$opp}{item}{$type} = $tempitem;
@@ -2160,7 +2175,7 @@ sub collision_fight {
         $gain = 7 if $gain < 7;
         $gain = int(($gain/100)*$rps{$u}{next});
         chanmsg(clog("$u [$myroll/$mysum] has come upon $opp [$opproll/$oppsum".
-                     "] and been defeated in combat! ".duration($gain)." is ".
+                     "] and was defeated in combat! ".duration($gain)." is ".
                      "added to $u\'s clock."));
         $rps{$u}{next} += $gain;
         chanmsg("$u reaches next level in ".duration($rps{$u}{next}).".");
@@ -2204,15 +2219,15 @@ sub writequestfile {
 }
 
 sub goodness {
-    my @players = grep { $rps{$_}{alignment} eq "g" &&
+    my @players = grep { $rps{$_}{alignment} eq "l" &&
                          $rps{$_}{online} } keys(%rps);
     return unless @players > 1;
     splice(@players,int(rand(@players)),1) while @players > 2;
     my $gain = 5 + int(rand(8));
-    chanmsg(clog("$players[0] and $players[1] have not let the iniquities of ".
-                 "evil men poison them. Together have they prayed to their ".
-                 "god, and it is his light that now shines upon them. $gain\% ".
-                 "of their time is removed from their clocks."));
+    chanmsg(clog("$players[0] and $players[1] have not let the pull of ".
+                 "the Dark side sway their decision to fight for the Light. ".
+                 "A fluctuation of the Force grants them $gain\% ".
+                 "of the time to their next level."));
     $rps{$players[0]}{next} = int($rps{$players[0]}{next}*(1 - ($gain/100)));
     $rps{$players[1]}{next} = int($rps{$players[1]}{next}*(1 - ($gain/100)));
     chanmsg("$players[0] reaches next level in ".
@@ -2222,18 +2237,21 @@ sub goodness {
 }
 
 sub evilness {
-    my @evil = grep { $rps{$_}{alignment} eq "e" &&
+    my @evil = grep { $rps{$_}{alignment} eq "d" &&
                       $rps{$_}{online} } keys(%rps);
     return unless @evil;
     my $me = $evil[rand(@evil)];
     if (int(rand(2)) < 1) {
         # evil only steals from good :^(
-        my @good = grep { $rps{$_}{alignment} eq "g" &&
+        my @good = grep { $rps{$_}{alignment} eq "l" &&
                           $rps{$_}{online} } keys(%rps);
         my $target = $good[rand(@good)];
-        my @items = ("ring","amulet","charm","weapon","helm","tunic",
-                     "pair of gloves","set of leggings","shield",
-                     "pair of boots");
+        my @items = ("portable fission generator",
+                   "planetary citizenship papers",
+                   "pazaak deck","stormtrooper blaster rifle",
+                   "flight helmet","flight suit",
+                   "vibroaxe","personal shield generator",
+                   "X-34 landspeeder","corellian light freighter");
         my $type = $items[rand(@items)];
         if (int($rps{$target}{item}{$type}) > int($rps{$me}{item}{$type})) {
             my $tempitem = $rps{$me}{item}{$type};
@@ -2253,9 +2271,9 @@ sub evilness {
     }
     else { # being evil only pays about half of the time...
         my $gain = 1 + int(rand(5));
-        chanmsg(clog("$me is forsaken by his evil god. ".
+        chanmsg(clog("$me is forsaken by the Dark side. ".
                      duration(int($rps{$me}{next} * ($gain/100)))." is added ".
-                     "to his clock."));
+                     "to their clock."));
         $rps{$me}{next} = int($rps{$me}{next} * (1 + ($gain/100)));
         chanmsg("$me reaches next level in ".duration($rps{$me}{next}).".");
     }
@@ -2297,16 +2315,16 @@ sub writedb {
                         "pen_logout",
                         "created",
                         "last login",
-                        "amulet",
-                        "charm",
-                        "helm",
-                        "boots",
-                        "gloves",
-                        "ring",
-                        "leggings",
-                        "shield",
-                        "tunic",
-                        "weapon",
+                        "portable fission generator",
+                        "planetary citizenship papers",
+                        "pazaak deck",
+                        "stormtrooper blaster rifle",
+                        "flight helmet",
+                        "flight suit",
+                        "vibroaxe",
+                        "personal shield generator",
+                        "X-34 landspeeder",
+                        "corellian light freighter",
                         "alignment")."\n";
     my $k;
     keys(%rps); # reset internal pointer
@@ -2333,16 +2351,16 @@ sub writedb {
                                 $rps{$k}{pen_logout},
                                 $rps{$k}{created},
                                 $rps{$k}{lastlogin},
-                                $rps{$k}{item}{amulet},
-                                $rps{$k}{item}{charm},
-                                $rps{$k}{item}{helm},
-                                $rps{$k}{item}{"pair of boots"},
-                                $rps{$k}{item}{"pair of gloves"},
-                                $rps{$k}{item}{ring},
-                                $rps{$k}{item}{"set of leggings"},
-                                $rps{$k}{item}{shield},
-                                $rps{$k}{item}{tunic},
-                                $rps{$k}{item}{weapon},
+                                $rps{$k}{item}{"portable fission generator"},
+                                $rps{$k}{item}{"planetary citizenship papers"},
+                                $rps{$k}{item}{"pazaak deck"},
+                                $rps{$k}{item}{"stormtrooper blaster rifle"},
+                                $rps{$k}{item}{"flight helmet"},
+                                $rps{$k}{item}{"flight suit"},
+                                $rps{$k}{item}{"vibroaxe"},
+                                $rps{$k}{item}{"personal shield generator"},
+                                $rps{$k}{item}{"X-34 landspeeder"},
+                                $rps{$k}{item}{"corellian light freighter"},
                                 $rps{$k}{alignment})."\n";
         }
     }

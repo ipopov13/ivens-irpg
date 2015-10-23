@@ -11,6 +11,8 @@ Star Wars setting.
   !! TO DO: Add p200 for non-gray force changers (line 821)
   !! TO DO: Add the other unique items, more tiers? (line 1377)
   !! TO DO: Change events text
+  - Changed quest main/penalty text
+  - Changed item event text
   - Changed battle text to fit all items
   - Unique items:
     B'omarr Brain Jar Helmet: 25+, 50-74, 1/40
